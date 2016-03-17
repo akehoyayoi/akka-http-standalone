@@ -8,6 +8,9 @@ trait Route {
       pathSingleSlash {
         complete(index)
       } ~
+      path("unknown") {
+        complete(notFound)
+      } ~
       path("ping") {
         complete("pong")
       }
@@ -21,10 +24,15 @@ trait Route {
           <p>Defined resources:</p>
           <ul>
             <li><a href="/ping">/ping</a></li>
-            <li><a href="/stop">/stop</a></li>
+            <li><a href="/unknown">/unknown</a></li>
           </ul>
         </body>
       </html>.toString
     )
+  )
+
+  private lazy val notFound = HttpResponse(
+    status = 404,
+    entity = "Not Found"
   )
 }

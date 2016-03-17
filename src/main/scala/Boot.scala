@@ -22,8 +22,7 @@ object Boot extends App with Route {
         |  / _ |  / /__  / /__ ___ _ ____  / // //_  __//_  __/  / _ \
         | / __ | /  '_/ /  '_// _ `//___/ / _  /  / /    / /    / ___/
         |/_/ |_|/_/\_\ /_/\_\ \_,_/      /_//_/  /_/    /_/    /_/
-        |
       """.stripMargin)
-    println(s"Configuration: Start server at $interface $port on ActorSystem(${system.name})")
+    println(s"  - Configuration: Start server at $interface $port on ActorSystem(${system.name})")
   }
 }
