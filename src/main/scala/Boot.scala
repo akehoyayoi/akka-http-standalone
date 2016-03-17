@@ -7,13 +7,16 @@ import Configuration._
 object Boot extends App with Route {
   implicit lazy val system = ActorSystem("my-system")
   implicit lazy val materializer = ActorMaterializer()
+  implicit val ec = system.dispatcher
+  val logger = Logging(system, getClass)
+  val binding = Http().bindAndHandle(routes, interface, port)
 
   info()
 
-  implicit val ec = system.dispatcher
-  val logger = Logging(system, getClass)
-
-  Http().bindAndHandle(routes, interface, port)
+  binding.onFailure {
+    case err: Exception =>
+      logger.error(err, s"Failed to bind to $interface $port")
+  }
 
   private def info(): Unit = {
     println(
@@ -23,6 +26,6 @@ object Boot extends App with Route {
         | / __ | /  '_/ /  '_// _ `//___/ / _  /  / /    / /    / ___/
         |/_/ |_|/_/\_\ /_/\_\ \_,_/      /_//_/  /_/    /_/    /_/
       """.stripMargin)
-    println(s"  - Configuration: Start server at $interface $port on ActorSystem(${system.name})")
+    logger.info(s"  - Configuration: Start server at $interface $port on ActorSystem(${system.name})")
   }
 }
