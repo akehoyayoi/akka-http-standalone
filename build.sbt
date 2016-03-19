@@ -16,10 +16,9 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-stream" % akkaV,
     "com.typesafe.akka" %% "akka-http-experimental" % akkaV,
     "com.typesafe.akka" %% "akka-http-spray-json-experimental" % akkaV,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaV,
-    "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5"
+    "com.typesafe.akka" %% "akka-http-xml-experimental" % akkaV,
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaV
   )
 }
-
 
 Revolver.settings
