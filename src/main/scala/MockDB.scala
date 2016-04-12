@@ -4,7 +4,7 @@ trait DB {
   def createUser(name: String): Either[Throwable, User]
   def getUsers: Either[Throwable, Seq[User]]
   def getUser(id: Int): Either[Throwable, Option[User]]
-  def updateUser(id: Int, name: String): Either[Throwable, Unit]
+  def updateUser(id: Int, name: String): Either[Throwable, Option[User]]
   def deleteUser(id: Int): Either[Throwable, Unit]
 }
 
@@ -31,7 +31,7 @@ object MockDB extends DB {
       if (u.id == id) u.copy(name = name)
       else u
     )
-    Right(())
+    getUser(id)
   }
 
   override def deleteUser(id: Int) = {

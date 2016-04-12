@@ -34,14 +34,14 @@ trait Route extends SprayJsonSupport {
             get {
               getUser(id)
             } ~
-            patch {
-              entity(as[UpdateUserRequest]) { request =>
-                updateUser(id, request.name)
+              patch {
+                entity(as[UpdateUserRequest]) { request =>
+                  updateUser(id, request.name)
+                }
+              } ~
+              delete {
+                deleteUser(id)
               }
-            } ~
-            delete {
-              deleteUser(id)
-            }
           }
       }
 
@@ -58,34 +58,49 @@ trait Route extends SprayJsonSupport {
     )
   )
 
+  private val userNotFound = "user_not_found"
+
   private def createUser(name: String)(implicit db: DB) =
     db.createUser(name) match {
-      case Left(err) => failWith(err)
-      case Right(user) => complete(user)
+      case Left(err) =>
+        failWith(err)
+      case Right(user) =>
+        complete(user)
     }
 
   private def getUsers()(implicit db: DB) =
     db.getUsers match {
-      case Left(err) => failWith(err)
-      case Right(users) => complete(users)
+      case Left(err) =>
+        failWith(err)
+      case Right(users) =>
+        complete(users)
     }
 
   private def getUser(id: Int)(implicit db: DB) =
     db.getUser(id) match {
-      case Left(err) => failWith(err)
-      case Right(None) => complete("user_not_found")
-      case Right(Some(user)) => complete(user)
+      case Left(err) =>
+        failWith(err)
+      case Right(None) =>
+        complete(StatusCodes.NotFound -> ErrorResponse(userNotFound))
+      case Right(Some(user)) =>
+        complete(user)
     }
 
   private def updateUser(id: Int, name: String)(implicit db: DB) =
     db.updateUser(id, name) match {
-      case Left(err) => failWith(err)
-      case Right(()) => complete(StatusCodes.OK)
+      case Left(err) =>
+        failWith(err)
+      case Right(None) =>
+        complete(StatusCodes.NotFound -> ErrorResponse(userNotFound))
+      case Right(Some(user)) =>
+        complete(user)
     }
 
   private def deleteUser(id: Int)(implicit db: DB) =
     db.deleteUser(id) match {
-      case Left(err) => failWith(err)
-      case Right(()) => complete(StatusCodes.OK)
+      case Left(err) =>
+        failWith(err)
+      case Right(()) =>
+        complete(StatusCodes.OK)
     }
 }
