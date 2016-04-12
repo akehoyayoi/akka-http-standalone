@@ -1,10 +1,9 @@
-import MyData._
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.ContentTypes
-import akka.http.scaladsl.model.{HttpEntity, HttpResponse}
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 
 trait Route extends SprayJsonSupport {
+  import MyData._
   import JsonProtocol._
 
   implicit val db: DB
@@ -34,6 +33,14 @@ trait Route extends SprayJsonSupport {
           path(IntNumber) { id =>
             get {
               getUser(id)
+            } ~
+            patch {
+              entity(as[UpdateUserRequest]) { request =>
+                updateUser(id, request.name)
+              }
+            } ~
+            delete {
+              deleteUser(id)
             }
           }
       }
@@ -68,5 +75,17 @@ trait Route extends SprayJsonSupport {
       case Left(err) => failWith(err)
       case Right(None) => complete("user_not_found")
       case Right(Some(user)) => complete(user)
+    }
+
+  private def updateUser(id: Int, name: String)(implicit db: DB) =
+    db.updateUser(id, name) match {
+      case Left(err) => failWith(err)
+      case Right(()) => complete(StatusCodes.OK)
+    }
+
+  private def deleteUser(id: Int)(implicit db: DB) =
+    db.deleteUser(id) match {
+      case Left(err) => failWith(err)
+      case Right(()) => complete(StatusCodes.OK)
     }
 }
