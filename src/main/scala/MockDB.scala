@@ -16,17 +16,17 @@ object MockDB extends DB {
     next_user_id
   }
 
-  override def createUser(name: String) = {
+  def createUser(name: String) = {
     val user = User(nextId(), name)
     user_table = user_table :+ user
     Right(user)
   }
 
-  override def getUsers = Right(user_table)
+  def getUsers = Right(user_table)
 
-  override def getUser(id: Int) = Right(user_table.find(_.id == id))
+  def getUser(id: Int) = Right(user_table.find(_.id == id))
 
-  override def updateUser(id: Int, name: String) = {
+  def updateUser(id: Int, name: String) = {
     user_table = user_table.map(u =>
       if (u.id == id) u.copy(name = name)
       else u
@@ -34,7 +34,7 @@ object MockDB extends DB {
     getUser(id)
   }
 
-  override def deleteUser(id: Int) = {
+  def deleteUser(id: Int) = {
     user_table = user_table.filterNot(_.id == id)
     Right(())
   }
