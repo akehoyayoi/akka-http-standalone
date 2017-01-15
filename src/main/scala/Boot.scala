@@ -2,6 +2,7 @@ import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
+import scala.util.{Success, Failure}
 
 object Boot extends App with Route {
   implicit lazy val system = ActorSystem("my-system")
@@ -15,9 +16,10 @@ object Boot extends App with Route {
 
   info()
 
-  binding.onFailure {
-    case err: Exception =>
-      logger.error(err, s"Failed to bind to $interface $port")
+  binding.onComplete {
+    case Success(_) => logger.info(s"Succeeded to bind to $interface $port")
+    case Failure(e) =>
+      logger.error(e.getMessage, s"Failed to bind to $interface $port")
   }
 
   private def info(): Unit = {
