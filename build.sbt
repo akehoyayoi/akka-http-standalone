@@ -1,3 +1,5 @@
+lazy val root = (project in file(".")).enablePlugins(JavaAppPackaging)
+
 name := "akka-http-standalone"
 
 version := "1.0"
@@ -11,6 +13,9 @@ assemblyOutputPath in assembly := file("./akka-http-standalone.jar")
 val akkaV = "2.4.16"
 val akkaHttpV = "10.0.1"
 
+packageName in Docker := "akka-http-standalone"
+dockerExposedPorts := Seq(5000)
+
 libraryDependencies ++= {
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaV,
@@ -23,3 +28,5 @@ libraryDependencies ++= {
 }
 
 Revolver.settings
+
+
