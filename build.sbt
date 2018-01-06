@@ -4,14 +4,14 @@ name := "akka-http-standalone"
 
 version := "1.0"
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.4"
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-Xlint")
 
 assemblyOutputPath in assembly := file("./akka-http-standalone.jar")
 
-val akkaV = "2.4.16"
-val akkaHttpV = "10.0.1"
+val akkaV = "2.5.8"
+val akkaHttpV = "10.1.0-RC1"
 
 packageName in Docker := "akka-http-standalone"
 
