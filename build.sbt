@@ -22,7 +22,10 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-http" % akkaHttpV,
     "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpV,
     "com.typesafe.akka" %% "akka-http-xml" % akkaHttpV,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV,
+    "org.scalikejdbc"   %% "scalikejdbc"       % "3.1.0",
+    "com.h2database"    %  "h2"                % "1.4.196",
+    "ch.qos.logback"    %  "logback-classic"   % "1.2.3"
   )
 }
 

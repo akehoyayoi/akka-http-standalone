@@ -7,7 +7,7 @@ import scala.util.{Success, Failure}
 object Boot extends App with Route {
   implicit lazy val system = ActorSystem("my-system")
   implicit lazy val materializer = ActorMaterializer()
-  override implicit val db = MockDB
+  override implicit val db = H2DB
   implicit val ec = system.dispatcher
   val interface = Configuration.interface
   val port = Configuration.port
